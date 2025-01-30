@@ -20,6 +20,7 @@ app.use(Cors(
 mongoose.connect(connection_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    tls: true,
 });
 
 // API Endpoints
