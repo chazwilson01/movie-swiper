@@ -10,7 +10,11 @@ const connection_url = "mongodb+srv://chazwilson01:5qzumzQFBDDKyIAK@cluster0.rp1
 
 // Middlewares
 app.use(express.json());
-app.use(Cors());
+app.use(Cors(
+    { origin: 'http://localhost:5000',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+     },
+));
 
 // DB Config
 mongoose.connect(connection_url, {
