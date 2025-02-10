@@ -24,7 +24,9 @@ const io = new Server(server, {
 });
 
 // Middleware
-app.use(Cors({ origin: 'http://localhost:5173', methods: ['GET', 'POST', 'PUT', 'DELETE'] }));
+app.use(Cors({    
+    origin: ['http://localhost:5173', "https://movie-swiper-59a03.web.app/", "https://movie-swiper-59a03.web.app/login"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'] }));
 app.use(express.json());
 app.use('/users', userRoutes);
 app.use('/login', loginRoutes);
