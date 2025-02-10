@@ -18,7 +18,7 @@ function SignupPage() {
 
         try {
             // Send signup request to backend
-            const response = await fetch("http://localhost:8002/signup", {
+            const response = await fetch("http://localhost:10000/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
