@@ -11,6 +11,11 @@ import MatchPopup from './match';
 import { set } from 'mongoose';
 
 const API_KEY = 'a05a0cbf8d9c0dc8cff08cf2b0fa97fc';
+const isLocal = window.location.hostname === "localhost";
+const SOCKET_URL = isLocal 
+    ? "http://localhost:10000" 
+    : "https://movie-swiper-backend.onrender.com";
+
 
 const Card = () => {
 
@@ -33,26 +38,18 @@ const Card = () => {
     const [swipeHistory, setSwipeHistory] = useState([])
     const [pages, setPages] = useState(Array.from({ length: 3 }, (_, i) => i + 1));  // Pages 1 to 30
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const currentIndexRef = useRef(currentIndex);
     const childRefs = useMemo(() => Array(movies.length).fill(0).map(() => React.createRef()), [movies]);
 
     const socket = useRef(null);
-    const [showMatchPopup, setShowMatchPopup] = useState(false);
 
     const navigate = useNavigate();
-    useEffect(() => {
-        const authUser = sessionStorage.getItem('authUser');
-        
-        if (!authUser) {
-            navigate('/login');
-        }
-    }, [navigate]);
     // Connect to Socket.io
     useEffect(() => {
+        socket.current = io(SOCKET_URL);
 
-        socket.current = io('http://localhost:8002');
+        
         const authUser = JSON.parse(sessionStorage.getItem('authUser'));
         const userEmail = authUser.email
         
@@ -296,64 +293,63 @@ const Card = () => {
     }
     
     return (
-        <div className="cards bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800 ">
-                        <div className="absolute inset-x-0 top-26 flex items-center justify-center gap-1.5 text-zinc-100 text-sm tracking-wide fade-in-delayed">
-                            <span className={`relative w-3 h-3 rounded-full ${userJoined ? 'bg-emerald-400' : 'bg-red-500'}`}>
-                                <span className={`absolute inset-0 rounded-full ${userJoined ? 'bg-emerald-400 animate-ping' : 'bg-red-500 animate-ping'}`}></span>
-                            </span>
-                            <span>{userJoined ? `${otherEmail} has joined` : userLeft ? `${otherEmail} has left` : 'No other user has joined'}</span>
-                        </div>
+        <div className="cards bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800">
+            <div className="absolute inset-x-0 top-26 flex items-center justify-center gap-1.5 text-zinc-100 text-sm tracking-wide fade-in-delayed">
+                <span className={`relative w-3 h-3 rounded-full ${userJoined ? 'bg-emerald-400' : 'bg-red-500'}`}>
+                    <span className={`absolute inset-0 rounded-full ${userJoined ? 'bg-emerald-400 animate-ping' : 'bg-red-500 animate-ping'}`}></span>
+                </span>
+                <span>{userJoined ? `${otherEmail} has joined` : userLeft ? `${otherEmail} has left` : 'No other user has joined'}</span>
+            </div>
 
-                        <div className="cardContainer">
-                            {movies.map((movie, index) => {
-                                const { title, overview, poster_path, backdrop_path } = movie;
-                                const imageUrl = `https://image.tmdb.org/t/p/w500${backdrop_path || poster_path}`;
-    
-                                return (
-                                    <TinderCard
-                                        ref={childRefs[index]}
-                                        className="swipe"
-                                        key={movie.id}
-                                        onSwipe={(dir) => swiped(dir, movie.id, index, title, imageUrl)}
-                                        // onCardLeftScreen={() => outOfFrame(movie.id, index)}
-                                        preventSwipe={['up', 'down']}
+            <div className="cardContainer fade-in">
+                {movies.map((movie, index) => {
+                    const { title, overview, poster_path, backdrop_path } = movie;
+                    const imageUrl = `https://image.tmdb.org/t/p/w500${backdrop_path || poster_path}`;
+
+                    return (
+                        <TinderCard
+                            ref={childRefs[index]}
+                            className="swipe fade-in"
+                            key={movie.id}
+                            onSwipe={(dir) => swiped(dir, movie.id, index, title, imageUrl)}
+                            preventSwipe={['up', 'down']}
+                        >
+                            <div style={{ backgroundImage: `url(${imageUrl})` }} className="card fade-in-card">
+                                <div className="card_content">
+                                    <h3>{title}</h3>
+
+                                    {showOverview && <p className="card-overview">{overview}</p>}
+
+                                    <button
+                                        className="toggle-button"
+                                        onClick={() => setShowOverview(!showOverview)}
                                     >
-                                        <div style={{ backgroundImage: `url(${imageUrl})` }} className="card fade-in-card">
-                                            <div className="card_content">
-                                                <h3>{title}</h3>
-    
-                                                {showOverview && <p className="card-overview">{overview}</p>}
-    
-                                                <button
-                                                    className="toggle-button"
-                                                    onClick={() => setShowOverview(!showOverview)}
-                                                >
-                                                    {showOverview ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </TinderCard>
-                                );
-                            })}
-                        </div>
-    
-                        <SwipeButtons
-                            onFavorite={() => swipe('right')}
-                            onDislike={() => swipe('left')}
-                            goBack={goBack}
-                        />    
-                        {/* <h2 className="infoText">{lastDirection ? `You swiped ${lastDirection}` : 'Swipe a card or press a button!'}</h2> */}
-                  
-                
-                {currentMatch ? (<MatchPopup
+                                        {showOverview ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                    </button>
+                                </div>
+                            </div>
+                        </TinderCard>
+                    );
+                })}
+            </div>
+
+            <SwipeButtons
+                onFavorite={() => swipe('right')}
+                onDislike={() => swipe('left')}
+                goBack={goBack}
+            />    
+
+            {currentMatch ? (
+                <MatchPopup
                     match={currentMatch}
                     onClose={() => setCurrentMatch(null)}
                     onEndSwiping={() => {
                         handleEndSession(sessionId);
-                        // Add end swiping logic here
                     }}
-                />) : null}
+                />
+            ) : null}
         </div>
+
     );
 }    
 

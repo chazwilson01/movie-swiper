@@ -1,38 +1,71 @@
-import express from 'express'
+import express from 'express';
 import User from '../models/users.models.js';
-import mongoose from 'mongoose';
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import rateLimit from "express-rate-limit";
+import { body, validationResult } from "express-validator";
+import dotenv from "dotenv";
 
+dotenv.config();
 const router = express.Router();
 
-// Login route
-router.post('/', async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        // 1. Find the user by email
-        const user = await User.findOne({ email });
-
-        // 2. If user is not found, return an error
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // 3. Verify the password (use bcrypt for security)
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid password' });
-        }
-
-        // 4. If login is successful, send a success response
-        res.json({ message: 'Login successful', email: user.email });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
+// Rate limiter: Prevent brute force attacks
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Allow max 5 login attempts per window per IP
+    message: { message: "Too many login attempts. Try again later." }
 });
 
+// JWT Token Generation Function
+const generateToken = (user) => {
+    return jwt.sign(
+        { id: user._id, email: user.email }, // Payload
+        process.env.JWT_SECRET, // Secret key from .env
+        { expiresIn: "7d" } // Token expires in 7 days
+    );
+};
 
-export default router
+// Login route with validation & security
+router.post(
+    "/",
+    // loginLimiter, // Apply rate limiting
+    [
+        // Validation rules
+        body("email").isEmail().withMessage("Invalid email format").normalizeEmail(),
+        body("password").notEmpty().withMessage("Password is required")
+    ],
+    async (req, res) => {
+        // Validate input
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
+        const { email, password } = req.body;
 
+        try {
+            // 1. Find the user by email
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            // 2. Verify the password (bcrypt)
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: "Invalid credentials" });
+            }
+
+            // 3. Generate JWT token for authentication
+            const token = generateToken(user);
+
+            // 4. Send response with token
+            res.json({ message: "Login successful", token, email, firstName, lastName });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
+        }
+    }
+);
+
+export default router;

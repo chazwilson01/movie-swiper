@@ -12,12 +12,19 @@ const JoinSession = () => {
     const navigate = useNavigate();
     const [error, setError] =  useState(location.state.error)
 
+    useEffect(() => {
+        sessionStorage.removeItem("sessionId")
+
+    }, [])
+
     const handleSessionJoined = () => {
         const authUser = JSON.parse(sessionStorage.getItem('authUser'));
         if (!authUser) {
-            alert('User is not authenticated');
+            setError('No User is Signed In');
             return;
         }
+
+        sessionStorage.setItem("sessionId",sessionId);
 
         navigate("/app", {
             state: {

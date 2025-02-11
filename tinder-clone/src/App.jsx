@@ -21,8 +21,21 @@ function App() {
           <Footer/>
           </>
           }/>
-        <Route path="/login" element={<SimpleLoginPage/>}/>
-        <Route path = "/signup" element={<SignupPage/>}/>
+        <Route path="/login" element={
+          
+          <>
+          <Header/>
+          <SimpleLoginPage/>
+          <Footer/>
+          </>
+        }/>
+        <Route path = "/signup" element={
+          <>
+          <Header/>
+          <SignupPage/>
+          <Footer/>
+          </>
+          }/>
         <Route path='/about' element = {
           
           <>

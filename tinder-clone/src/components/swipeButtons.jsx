@@ -2,9 +2,7 @@ import React from "react";
 import "./swipeButtons.css";
 import ReplayIcon from "@mui/icons-material/Replay";
 import CloseIcon from "@mui/icons-material/Close";
-import StarRateIcon from "@mui/icons-material/StarRate";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FlashOnIcon from "@mui/icons-material/FlashOn";
 import IconButton from "@mui/material/IconButton";
 
 
@@ -14,15 +12,15 @@ const SwipeButtons = ({
     goBack
     }) => {
     return (
-        <div className="swipeButtons fixed bottom-[15vh] flex justify-center gap-15 w-full bg-gradient-to-br">
-            <IconButton className="swipeButtons__repeat text-[#f5b748] p-[3vw]" onClick={goBack}>
-                <ReplayIcon fontSize="large" />
+        <div className="swipeButtons fixed bottom-[18vh] flex justify-center gap-15 w-full bg-gradient-to-br">
+            <IconButton className="swipeButtons__repeat p-[3vw]" onClick={goBack}>
+                <ReplayIcon fontSize="large" sx={{color: "#f5b748"}} />
             </IconButton>
             <IconButton className="swipeButtons__left p-[3vw]" onClick={onDislike}>
-                <CloseIcon fontSize="large" />
+                <CloseIcon fontSize="large" sx={{color:"#FF4C4C"}}/>
             </IconButton>
             <IconButton className="swipeButtons__right p-[3vw]" onClick={onFavorite}>
-                <FavoriteIcon fontSize="large" />
+                <FavoriteIcon fontSize="large" sx={{color:"#A855F7"}} />
             </IconButton>
         </div>
     );

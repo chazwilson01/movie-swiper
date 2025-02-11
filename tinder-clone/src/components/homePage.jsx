@@ -1,7 +1,12 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import './HomePage.css';
 import Footer from './footer';
 const HomePage = () => {
+
+     useEffect(() => {
+            sessionStorage.removeItem("sessionId")
+    
+        }, [])
     return (
         <>
         <div className="home-page-container flex items-center justify-center h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800 relative overflow-hidden">
