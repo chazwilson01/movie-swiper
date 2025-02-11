@@ -57,7 +57,10 @@ router.post(
             }
 
             // 3. Generate JWT token for authentication
+            console.log(process.env.JWT_SECRET)
             const token = generateToken(user);
+            const firstName = user.firstName
+            const lastName = user.lastName
 
             // 4. Send response with token
             res.json({ message: "Login successful", token, email, firstName, lastName });
