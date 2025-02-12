@@ -1,0 +1,67 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    /* background-color: rgba(50, 50, 50, 0.7); Semi-transparent black */
+    color: white;
+    width: 100%;
+    z-index: 50;
+    backdrop-filter: blur(5px); /* Optional: adds a subtle blur effect behind the navbar */
+    background: rgba(0, 0, 0, 0.05); /* Almost invisible background */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    backdrop-filter: blur(4px); /* Optional blur for a glass effect */
+    color: #fff;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.left-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: #ccc;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #fff;
+}
+
+.icon-container {
+    position: relative;
+}
+
+
+/* Hover effect to increase visibility */
+.navbar:hover {
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.menu {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Simple fade-in animation for menu */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Additional styling for buttons */
+.logout-button {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

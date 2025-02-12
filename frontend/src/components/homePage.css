@@ -1,0 +1,21 @@
+/* Fade-In Animation for Buttons */
+.hp-btns {
+  opacity: 0; /* Start with buttons invisible */
+  animation: fadeIn 1s ease-in-out forwards; /* Apply fade-in animation */
+  animation-delay: 1s; /* Delay the animation by 1 second */
+}
+
+.hp-txt {
+  opacity: 0; /* Start with buttons invisible */
+  animation: fadeIn 1s ease-in-out forwards; /* Apply fade-in animation */
+  animation-delay: 1s; /* Delay the animation by 1 second */
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0; /* Start fully transparent */
+  }
+  100% {
+    opacity: 1; /* End fully visible */
+  }
+}
