@@ -18,7 +18,7 @@ Check out Movie Swiper live: [Movie Swiper](https://movie-swiper-59a03.web.app/)
 - **Frontend**: React, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
-- **Hosting**: Firebase Hosting
+- **Hosting**: Frontend - Firebase / Backend - Render
 
 ## Usage
 
