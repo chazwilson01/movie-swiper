@@ -9,12 +9,17 @@ import HomePage from './components/homePage'
 import Footer from './components/footer'
 import JoinSession from './components/joinSession'
 import AboutPage from './components/about'
+import Countdown from './components/countdown'
 function App() {
 
   return (
     <Router>
       <Routes>
-        <Route path = "/" element ={
+
+        <Route path='/' element = {
+          <Countdown/>
+        }/>
+        <Route path = "/homePage" element ={
           <>
           <Header/>
           <HomePage/>

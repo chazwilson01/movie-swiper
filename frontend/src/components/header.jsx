@@ -55,7 +55,7 @@ const Header = () => {
       <div className="navbar flex justify-between items-center px-5 py-3 fixed top-0 left-0 w-full z-50">
           <div className="left-content flex items-center gap-6">
               <h1 className="text-2xl font-bold">Movie Swiper</h1>
-              <a href="/" className="nav-link">Home</a>
+              <a href="/homePage" className="nav-link">Home</a>
               <a href="/about" className="nav-link">About</a>
               <a onClick={handleJoinSession} className="nav-link cursor-pointer">Start Swiping</a>
           </div>
