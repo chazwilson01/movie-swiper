@@ -28,7 +28,7 @@ const generateToken = (user) => {
 // Login route with validation & security
 router.post(
     "/",
-    // loginLimiter, // Apply rate limiting
+    loginLimiter, // Apply rate limiting
     [
         // Validation rules
         body("email").isEmail().withMessage("Invalid email format").normalizeEmail(),
