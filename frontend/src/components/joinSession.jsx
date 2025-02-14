@@ -4,37 +4,31 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import './JoinSession.css';
 
-
 const JoinSession = () => {
     const [sessionId, setSessionId] = useState('');
     const socket = useRef(null);
-    const location = useLocation()
+    const location = useLocation();
     const navigate = useNavigate();
-    const [error, setError] =  useState(location.state.error)
+    const [error, setError] = useState(location.state?.error || '');
 
     useEffect(() => {
-        sessionStorage.removeItem("sessionId")
+        sessionStorage.removeItem("sessionId");
+    }, []);
 
-    }, [])
+    const handleSessionJoined = (event) => {
+        event.preventDefault(); // Prevents the form from refreshing the page
 
-    const handleSessionJoined = () => {
         const authUser = JSON.parse(sessionStorage.getItem('authUser'));
         if (!authUser) {
             setError('No User is Signed In');
             return;
         }
 
-        sessionStorage.setItem("sessionId",sessionId);
+        sessionStorage.setItem("sessionId", sessionId);
 
         navigate("/app", {
-            state: {
-                sessionId: sessionId
-            }
-        })
-
-
-
-
+            state: { sessionId: sessionId }
+        });
     };
 
     return (
@@ -47,22 +41,23 @@ const JoinSession = () => {
             >
                 <h2 className="join-session-title text-indigo-900">Create or Join a Session</h2>
 
-                <input
-                    type="text"
-                    placeholder="Enter session ID (e.g., fortnite)"
-                    value={sessionId}
-                    onChange={(e) => setSessionId(e.target.value)}
-                    className="join-session-input"
-                />
+                {/* Form to handle Enter key */}
+                <form onSubmit={handleSessionJoined}>
+                    <input
+                        type="text"
+                        placeholder="Enter session ID (e.g., fortnite)"
+                        value={sessionId}
+                        onChange={(e) => setSessionId(e.target.value)}
+                        className="join-session-input"
+                    />
 
-                {error && <p className="join-session-error">{error}</p>}
+                    {error && <p className="join-session-error">{error}</p>}
 
-                <button
-                    onClick={handleSessionJoined}
-                    className="join-session-button"
-                >
-                    Join Session
-                </button>
+                    {/* Button will be triggered on Enter press */}
+                    <button type="submit" className="join-session-button">
+                        Join Session
+                    </button>
+                </form>
             </motion.div>
         </div>
     );

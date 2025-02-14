@@ -7,6 +7,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import MatchPopup from './match';
+import { set } from 'mongoose';
 
 const API_KEY = 'a05a0cbf8d9c0dc8cff08cf2b0fa97fc';
 const isLocal = window.location.hostname === "localhost";
@@ -26,7 +27,7 @@ const Card = () => {
     const [lastDirection, setLastDirection] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(-1);
     const [isReturn, setIsReturn] = useState(false);
-    const [sessionId, setSessionId] = useState(location.state.sessionId);
+    const [sessionId, setSessionId] = useState("");
     const [currentMatch, setCurrentMatch] = useState(null)
     const [userJoined, setUserJoined] = useState(false)
     const [userLeft, setUserLeft] = useState(false)
@@ -45,6 +46,20 @@ const Card = () => {
     const navigate = useNavigate();
     // Connect to Socket.io
     useEffect(() => {
+        const storedSessionId = location.state?.sessionId || sessionStorage.getItem("sessionId");
+
+
+
+        if(!location.state || !location.state.sessionId) {
+            navigate("/joinSession", {
+                state: {
+                    error: "Unauthorized Access"
+                }
+            })
+            return
+        }
+
+        setSessionId(storedSessionId)
         socket.current = io(SOCKET_URL);
 
         

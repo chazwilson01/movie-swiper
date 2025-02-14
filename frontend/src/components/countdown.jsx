@@ -11,7 +11,7 @@ const Countdown = () => {
         const timer = setTimeout(() => {
             setShowCountdown(false);
             navigate("/homePage")
-        }, 5000); // Adjust this duration to match your video length
+        }, 4800); // Adjust this duration to match your video length
     
         return () => clearTimeout(timer); // Cleanup timer
         }, [])
