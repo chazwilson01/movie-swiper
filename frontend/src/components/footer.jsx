@@ -34,15 +34,15 @@ const socialLinks = [
 const Footer = () => {
     return (
         <footer className="footer absolute bottom-0 w-[100vw] bg-black text-stone-200 py-6 px-4 mt-12">
-            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <div className="social-icons flex space-x-4">
+            <div className="container mx-auto flex flex-row justify-between items-center md:gap-0 sm:gap-3">
+                <div className="social-icons flex md:gap-0 sm:gap-3">
                     {socialLinks.map((link, index) => (
                         <a
                             key={index}
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-12 h-12 grid place-items-center ring-inset ring-2 ring-zinc-50/5 
+                            className="md:w-12 md:h-12 sm:w-8 sm:h-8 grid place-items-center ring-inset ring-2 ring-zinc-50/5 
                            rounded-lg transition-[background-color,color] hover:text-zinc-950 active:bg-zin-50/80"
                             aria-label={link.alt}
                         >

@@ -64,7 +64,7 @@ function LoginPage() {
             <LoadingSpinner message={"Validating Login..."}/>
         ) : (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800">
-            <div className={`bg-purple-950 bg-opacity-90 text-white p-8 rounded-xl shadow-lg w-full max-w-md ${animate ? 'animate-login' : ''}`}>
+            <div className={`bg-purple-950 bg-opacity-90 text-white p-8 rounded-xl shadow-lg md:w-full w-[80vw] max-w-md ${animate ? 'animate-login' : ''}`}>
                 <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
                 
                 {error && <p className="text-red-400 text-sm text-center mb-4">{error}</p>}

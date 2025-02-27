@@ -42,15 +42,12 @@ const Card = () => {
     const childRefs = useMemo(() => Array(movies.length).fill(0).map(() => React.createRef()), [movies]);
 
     const socket = useRef(null);
+    const storedSessionId = location.state?.sessionId || sessionStorage.getItem('sessionId');
 
     const navigate = useNavigate();
     // Connect to Socket.io
     useEffect(() => {
-        const storedSessionId = location.state?.sessionId || sessionStorage.getItem("sessionId");
-
-
-
-        if(!location.state || !location.state.sessionId) {
+        if(!storedSessionId) {
             navigate("/joinSession", {
                 state: {
                     error: "Unauthorized Access"
@@ -60,15 +57,19 @@ const Card = () => {
         }
 
         setSessionId(storedSessionId)
+    }, [])
+
+    useEffect(() => {
+
         socket.current = io(SOCKET_URL);
 
         
         const authUser = JSON.parse(sessionStorage.getItem('authUser'));
         const userEmail = authUser.email
-        
-        console.log(location.state)
+        setSessionId(storedSessionId)
+        console.log("Session ID", sessionId)
         // Join a session (sessionId can be dynamically set)
-        socket.current.emit('joinSession', { sessionId, userEmail });
+        socket.current.emit("joinSession", { sessionId, userEmail });
 
         socket.current.on('sessionJoined', (data) => {
             console.log('Session joined successfully:', data);
@@ -130,7 +131,7 @@ const Card = () => {
             socket.current.emit("leaveSession", {sessionId})
             socket.current.disconnect();
         };
-    }, []);
+    }, [sessionId]);
 
     // Check authentication
     

@@ -71,7 +71,7 @@ function SignupPage() {
             <LoadingSpinner message={"Validating Signup..."} />
         ) : (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800">
-                <div className={`bg-purple-950 bg-opacity-90 text-white p-8 rounded-xl shadow-lg w-full max-w-md ${animate ? 'animate-signup' : ''}`}>
+                <div className={`bg-purple-950 bg-opacity-90 text-white p-8 rounded-xl shadow-lg md:w-full w-[80vw] max-w-md ${animate ? 'animate-signup' : ''}`}>
                     <h1 className="text-3xl font-bold text-center mb-6">Sign Up</h1>
                     
                     {error.length > 0 && (
